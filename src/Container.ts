@@ -28,7 +28,7 @@ function Container<S = any, P = any>(template: React.ComponentType<any>): Contai
 
         private lastProps?: any = null
 
-        propKeys: Array<keyof this> = this.propKeys || []
+        public propKeys: Array<keyof this> = this.propKeys || []
 
         constructor(props?: any, context?: any) {
             super(props, context)
@@ -39,6 +39,14 @@ function Container<S = any, P = any>(template: React.ComponentType<any>): Contai
 
         componentWillUnmount() {
             if (typeof this.unsubscribe === "function") this.unsubscribe()
+        }
+
+        get store(): S {
+            return this.context.store.getState()
+        }
+
+        get dispatch(): Dispatch<S> {
+            return this.context.store.dispatch
         }
 
         private mayUpdate(): void {
@@ -55,15 +63,11 @@ function Container<S = any, P = any>(template: React.ComponentType<any>): Contai
         }
 
         didPropChange(p1: any, p2: any): boolean {
-            return p1 !== p2
-        }
-
-        get store(): S {
-            return this.context.store.getState()
-        }
-
-        get dispatch(): Dispatch<S> {
-            return this.context.store.dispatch
+            if (typeof p1 === "function" && typeof p2 === "function") {
+                return false
+            } else {
+                return p1 !== p2
+            }
         }
 
         private addProp(key: keyof this) {
@@ -77,6 +81,14 @@ function Container<S = any, P = any>(template: React.ComponentType<any>): Contai
             const props = this.propKeys.reduce((acc: any, key) => (acc[key] = this[key], acc), {})
             this.lastProps = props
             return props
+        }
+
+        getPropValue(key: keyof this) {
+            if (typeof this[key] === "function") {
+                return (<Function>this[key]).bind(this)
+            } else {
+                return this[key]
+            }
         }
 
         render() {
