@@ -28,7 +28,7 @@ function Container<S = any, P = any>(template: React.ComponentType<any>): Contai
 
         private lastProps?: any = null
 
-        propKeys: Array<keyof this> = []
+        propKeys: Array<keyof this> = this.propKeys || []
 
         constructor(props?: any, context?: any) {
             super(props, context)
