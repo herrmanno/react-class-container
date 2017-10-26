@@ -1,0 +1,27 @@
+{
+  "name": "react-class-container",
+  "version": "1.0.0",
+  "description": "Manage your react containers as es6 classes",
+  "main": "./lib/index.js",
+  "typings": "./lib/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "prepublish": "tsc && tslint src/**"
+  },
+  "keywords": ["react", "redux", "container", "class", "es6", "decorator"],
+  "author": "o.herrmann92@gmail.com",
+  "license": "ISC",
+  "peerDependencies": {
+    "react": ">=15.x.x"
+  },
+  "devDependencies": {
+    "@types/react": "^16.0.18",
+    "@types/redux": "^3.6.0",
+    "typescript": "^2.5.3"
+  },
+  "dependencies": {
+    "@types/prop-types": "^15.5.2",
+    "prop-types": "^15.6.0",
+    "tslint": "^5.8.0"
+  }
+}
