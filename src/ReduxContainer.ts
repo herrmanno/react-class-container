@@ -72,6 +72,8 @@ function ReduxContainer<R = any, P = any, S = any>(template: React.ComponentType
         }
 
         didStateChanged(p1: any, p2: any): boolean {
+            p1 = p1 || {}
+            p2 = p2 || {}
             return Object.keys(p1).some(key => this.didPropChange(p1[key], p2[key]))
         }
 
