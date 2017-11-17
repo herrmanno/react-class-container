@@ -17,32 +17,14 @@ interface ContainerComponent<P = any, S = any> extends React.Component<P> {
     propKeys?: Array<string|symbol>
 
     /**
-     * the state of the redux store, if one is accessiable from the container
+     * Called to get the value of an field marked as Prop
      */
-    store?: S
+    getPropValue?(key: keyof this): any
 
     /**
-     * the redux store's dispatch method, if one is accessiable from the container
+     * @returns an object containig all fields marked as Prop
      */
-    dispatch?: Dispatch<S>
-
-    /**
-     * didStateChanged will be called by the container to decide if the props it provides have been changed
-     *
-     * @param oldStateProps the last rendered childProps of the container
-     * @param newStateProps the newly available childProps of the container
-     * @returns true if the arguments are in a way different, that indicates that the container should rerender, otherwise false
-     */
-    didStateChanged?<T>(oldStateProps: T, newStateProps: T): boolean
-
-    /**
-     * will be called by {@see didStateChanged}
-     *
-     * @param oldStateProps a single prop at the time of last rendering
-     * @param newStateProps the same prop at current time
-     * @returns true if the two arguments differ in a way, that indicates that the container should rerender, otherwise false
-     */
-    didPropChange?(oldProp: any, newProp: any): boolean
+    getProps(): any
 }
 
 export default ContainerComponent

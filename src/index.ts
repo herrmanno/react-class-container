@@ -1,6 +1,19 @@
 import Container from "./Container"
-import Prop from "./Prop"
 import ContainerClass from "./ContainerClass"
 import ContainerComponent from "./ContainerComponent"
+import ReduxContainer from "./ReduxContainer"
+import ReduxContainerClass from "./ReduxContainerClass"
+import ReduxContainerComponent from "./ReduxContainerComponent"
+import Prop from "./Prop"
+import Provider from "./Provider"
 
-export {Container, Prop, ContainerClass, ContainerComponent}
+export {
+    Container,
+    ContainerClass,
+    ContainerComponent,
+    ReduxContainer,
+    ReduxContainerClass,
+    ReduxContainerComponent,
+    Prop,
+    Provider
+}
