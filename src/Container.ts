@@ -2,6 +2,7 @@ import * as React from "react"
 import * as Proptypes from "prop-types"
 import {Dispatch, Store} from "redux"
 import ContainerClass from "./ContainerClass"
+import ContainerComponent from "./ContainerComponent"
 
 /**
  * @param template a (probably presentational) Component to render
@@ -17,34 +18,15 @@ import ContainerClass from "./ContainerClass"
  * }
  * ```
  */
-function Container<P = any, S = any>(template: React.ComponentType<any>): ContainerClass<P, S> {
-    return class extends React.Component<P> {
-
-        public propKeys: Array<keyof this> = this.propKeys || []
-
-        protected addProp(key: keyof this) {
-            if (!this.propKeys) {
-                this.propKeys = []
-            }
-            this.propKeys.push(key)
-        }
-
-        getProps() {
-            return this.propKeys.reduce((acc: any, key) => (acc[key] = this[key], acc), {})
-        }
-
-        getPropValue(key: keyof this) {
-            if (typeof this[key] === "function") {
-                return (<Function>this[key]).bind(this)
-            } else {
-                return this[key]
-            }
-        }
+function Container<P, S, V>(template: React.ComponentType<V>): ContainerClass<P, S, V> {
+    abstract class ContainerImplementation extends ContainerComponent<V, P, S> {
 
         render() {
-            return React.createElement(template, this.getProps())
+            return React.createElement(template, this.getChildProps())
         }
     }
+
+    return ContainerImplementation as any
 }
 
 

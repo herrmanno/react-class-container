@@ -8,23 +8,11 @@ import {Dispatch} from "redux"
  * The ContainerComponent my overwrite some of React's lifecycle methods.
  * If your class extends ContainerComponent and overwrites some lifecycle methods remember to call {@code super()}
  */
-interface ContainerComponent<P = any, S = any> extends React.Component<P> {
-    /**
-     * Keys of the container's fields and methods which should by provided to its template
-     *
-     * One can omit to provide this field manually if using {@see Prop}
-     */
-    propKeys?: Array<string|symbol>
-
-    /**
-     * Called to get the value of an field marked as Prop
-     */
-    getPropValue?(key: keyof this): any
-
+abstract class ContainerComponent<V, P = any, S = any> extends React.PureComponent<P, S> {
     /**
      * @returns an object containig all fields marked as Prop
      */
-    getProps(): any
+    public abstract getChildProps(): V
 }
 
 export default ContainerComponent
