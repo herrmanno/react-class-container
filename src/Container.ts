@@ -18,8 +18,8 @@ import ContainerComponent from "./ContainerComponent"
  * }
  * ```
  */
-function Container<P, S, V>(template: React.ComponentType<V>): ContainerClass<P, S, V> {
-    abstract class ContainerImplementation extends ContainerComponent<V, P, S> {
+function Container<V>(template: React.ComponentType<V>): ContainerClass<V> {
+    abstract class ContainerImplementation extends ContainerComponent<V> {
 
         render() {
             return React.createElement(template, this.getChildProps())

@@ -19,19 +19,8 @@ import ReduxContainerComponent from "./ReduxContainerComponent"
  * }
  * ```
  */
-function ReduxContainer<P, S, V, R>(template: React.ComponentType<any>): ReduxContainerClass<P, S, V, R> {
-    abstract class ContainerImplementation extends ReduxContainerComponent<V, R, P, S> {
-
-        private readonly unsubscribe: Function
-
-        constructor(props?: P, context?: any) {
-            super(props, context)
-            this.unsubscribe = this.store.subscribe(this.forceUpdate.bind(this))
-        }
-
-        componentWillUnmount() {
-            this.unsubscribe()
-        }
+function ReduxContainer<V>(template: React.ComponentType<V>): ReduxContainerClass<V> {
+    abstract class ContainerImplementation extends ReduxContainerComponent<V> {
 
         render() {
             return React.createElement(template, this.getChildProps())

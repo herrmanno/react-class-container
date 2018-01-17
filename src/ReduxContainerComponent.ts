@@ -10,10 +10,21 @@ import ContainerComponent from "./ContainerComponent"
  * The ReduxContainerComponent my overwrite some of React's lifecycle methods.
  * If your class extends ContainerComponent and overwrites some lifecycle methods remember to call {@code super()}
  */
-abstract class ReduxContainerComponent<V, R = any, P = any, S = any> extends ContainerComponent<V, P, S> {
+abstract class ReduxContainerComponent<V, R = any, P = {}, S = {}> extends ContainerComponent<V, P, S> {
 
     static contextTypes = {
         store: Proptypes.object.isRequired
+    }
+
+    private readonly unsubscribe: Function
+
+    constructor(props?: any, context?: any) {
+        super(props, context)
+        this.unsubscribe = this.store.subscribe(this.forceUpdate.bind(this))
+    }
+
+    componentWillUnmount() {
+        this.unsubscribe()
     }
 
     /**
