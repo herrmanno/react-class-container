@@ -3,9 +3,10 @@ import * as ReactDOM from "react-dom"
 import { createStore } from "redux"
 import { Provider, ReduxContainer } from "../../lib"
 
-const store = createStore((state = "", action) => {
+const store = createStore((state = {name: "", value: 0}, action) => {
     switch (action.type) {
-        case "SET_NAME": return action.payload
+        case "SET_NAME": return {...state, name: action.payload}
+        case "SET_VALUE": return {...state, value: action.payload}
         default: return state
     }
 })
@@ -44,12 +45,16 @@ class AppContainer extends ReduxContainer(App) {
             () => this.setState({ ready: true}),
             1000)
     }
+
+    componentWillReceiveReduxState(state) {
+        return state.name
+    }
     
     getChildProps() {
         return {
             ...this.props,
             ...this.state,
-            name: this.store.getState(),
+            name: this.store.getState().name,
             onChangeName: (name) =>  {
                 this.store.dispatch({
                     type: "SET_NAME",
@@ -60,8 +65,50 @@ class AppContainer extends ReduxContainer(App) {
     }
 }
 
+function Counter(props) {
+    return <button onClick={props.onClick}>{props.value}</button>
+}
+
+class CounterContainer extends ReduxContainer(Counter) {
+    componentWillReceiveReduxState(s) {
+        return s.value
+    }
+    
+    getChildProps() {
+        const state = this.store.getState()
+        return {
+            value: state.value,
+            onClick: () => this.store.dispatch({
+                type: "SET_VALUE",
+                payload: state.value + 1
+            })
+            
+        }
+    }
+}
+
+class Test extends React.PureComponent {
+    state = {
+        show: true
+    }
+    
+    componentWillMount() {
+        setTimeout(() => this.setState({show: false}), 10000)
+    }
+    
+    
+    render() {
+        return (
+            <React.Fragment>
+                { this.state.show ? <AppContainer title="FOO"/> : null }
+                <CounterContainer/>
+            </React.Fragment>
+        )
+    }
+}
+
 ReactDOM.render(
     <Provider store={store}>
-        <AppContainer title="FOO_BAR"/>
+        <Test/>
     </Provider>,
-document.body)
+document.body.firstElementChild)
