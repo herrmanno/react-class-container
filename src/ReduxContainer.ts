@@ -1,6 +1,9 @@
 import * as React from "react"
 import * as Proptypes from "prop-types"
-import {Dispatch, Store} from "redux"
+import {
+    Dispatch,
+    Store,
+} from "redux"
 import Container from "./Container"
 import ReduxContainerClass from "./ReduxContainerClass"
 import ReduxContainerComponent from "./ReduxContainerComponent"

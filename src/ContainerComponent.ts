@@ -1,5 +1,4 @@
 import * as React from "react"
-import {Dispatch} from "redux"
 
 /**
  * A Component which renderes a pre-defined template and provides props to this template

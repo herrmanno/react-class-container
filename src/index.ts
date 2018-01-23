@@ -4,7 +4,6 @@ import ContainerComponent from "./ContainerComponent"
 import ReduxContainer from "./ReduxContainer"
 import ReduxContainerClass from "./ReduxContainerClass"
 import ReduxContainerComponent from "./ReduxContainerComponent"
-import Prop from "./Prop"
 import Provider from "./Provider"
 
 export {
@@ -14,6 +13,5 @@ export {
     ReduxContainer,
     ReduxContainerClass,
     ReduxContainerComponent,
-    Prop,
     Provider
 }
