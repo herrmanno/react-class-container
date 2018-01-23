@@ -6,7 +6,7 @@
   "typings": "./lib/index.d.ts",
   "scripts": {
     "build": "tsc",
-    "prepublish": "tsc && tslint src/**"
+    "prepublishOnly": "tsc && tslint src/**"
   },
   "keywords": [
     "react",
