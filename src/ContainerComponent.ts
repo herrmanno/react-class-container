@@ -3,9 +3,7 @@ import * as React from "react"
 /**
  * A Component which renderes a pre-defined template and provides props to this template
  *
- *
  * The ContainerComponent my overwrite some of React's lifecycle methods.
- * If your class extends ContainerComponent and overwrites some lifecycle methods remember to call {@code super()}
  */
 abstract class ContainerComponent<V, P = any, S = any> extends React.PureComponent<P, S> {
     /**

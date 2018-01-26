@@ -19,108 +19,67 @@ const MyComponent = (props) =>
 ```javascript
 // mycontainer.js
 
-import {Container, Prop} from "react-class-container"
+import {Container} from "react-class-container"
 
 /*
 * Container(MyComponent) meens 'create a class that will always render MyComponent'
 */
 class MyContainer extends Container(MyComponent) {
     
-    /*
-    * this will be available as `props.foo` inside MyComponent
-    */
-    @Prop get greeting() {
-        return "foo"
-    }
-
     componentWillMount() {
         // do some initialization of your component
     }
+    
+    /*
+    * this will be available as `props.foo` inside MyComponent
+    */
+    getChildProps() {
+        return { greeting: "foo" }
+    }
+
 }
 ```
 
 
 ## usage with redux
 
-Every Container component tries to get access to a context variable called `store`, which should be a valid [redux store](http://redux.js.org/docs/basics/Store.html), if provided.
-The easiest way to provide this context is to use react-redux's [Provider](https://github.com/reactjs/react-redux/blob/master/docs/api.md#provider-store).
+Every ReduxContainer component tries to get access to a context variable called `store`, which should be a valid [redux store](http://redux.js.org/docs/basics/Store.html), if provided.
+The easiest way to provide this context is to the build-in Provider component or react-redux's [Provider](https://github.com/reactjs/react-redux/blob/master/docs/api.md#provider-store).
 
 ```javascript
-/*
- * Assume your redux store will be provided
- */
+import {ReduxContainer} from "react-class-container"
 
-import {Container, Prop} from "react-class-container"
-
-class MyContainer extends Container(MyComponent) {
+class MyContainer extends ReduxContainer(MyComponent) {
     
-    /*
-    * `this.store` is the redux store you provided
-    */
     @Prop get greeting() {
         return this.store.greeting
     }
 
-    @Prop fireSomeAction() {
-        return this.dispatch(someActionCreator)
+    getChildProps() {
+        return {
+            greeting: this.store.getState().greeting,
+            onFireSomeAction: this.store.dispatch({/*...*/})
+        }
     }
 
 }
 ```
 
-## usage without decorators
-
-```javascript
-import {Container, Prop} from "react-class-container"
-
-class MyContainer extends Container(MyComponent) {
-    
-    constructor(props, context) {
-        super(props, context)
-        this.propKeys = [
-            "greeting",
-            "fireSomeAction"
-        ]
-    }
-
-    /*
-    * `this.store` is the redux store you provided
-    */
-    @Prop get greeting() {
-        return this.store.greeting
-    }
-
-    @Prop fireSomeAction() {
-        return this.dispatch(someActionCreator)
-    }
-
-}
-```
 
 ## fine-tune when to rerender
 
 ```javascript
-import {Container, Prop} from "react-class-container"
+import {Container} from "react-class-container"
 
-class MyContainer extends Container(MyComponent) {
+class MyContainer extends ReduxContainer(MyComponent) {
     
     /*
     * olsState and newState are objects containing all the @Prop fields of your container
     */
-    didStateChanged(oldState, newState) {
-        if(onlyFooChanged(oldState, newState))
-            return false
-        if(alsoOtherPropsChanged(oldState, newState))
-            return true
+    componentWillReceiveReduxState(state) {
+        // this will be cached and compared the next time the redux store changes
+        // if you return the same value (flatly compared) as last time 'MyComponent' wont rerender
+        return state.greeting
     }   
-
-    @Prop get foo() {
-        return Math.random()
-    }
-
-    /*
-     some other props
-    */
-
 }
 ```

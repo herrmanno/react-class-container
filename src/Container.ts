@@ -1,5 +1,4 @@
 import * as React from "react"
-import {Dispatch, Store} from "redux"
 import ContainerClass from "./ContainerClass"
 import ContainerComponent from "./ContainerComponent"
 
@@ -8,11 +7,11 @@ import ContainerComponent from "./ContainerComponent"
  * @returns a new ContainerClass
  *
  * @example
- * ```typescript
+ * ```javascript
  * let Foo = props => <span>{prop.name}</span>
  * class FooContainer extensd Container(Foo) {
- *   @Prop get name() {
- *     return "what ever you like here"
+ *   getChildProps() {
+ *     return { name: "Foo" }
  *   }
  * }
  * ```
