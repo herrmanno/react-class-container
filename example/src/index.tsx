@@ -121,7 +121,7 @@ function TodoList(props: { todos: Array<Todo>, onToggleTodo(id: string): any }) 
     )
 }
 
-class TodoListContainer extends ReduxContainer(TodoList) {
+class TodoListContainer extends ReduxContainer(TodoList)<State> {
     getFilteredTodos() {
         const { todos, filter } = this.store.getState()
         return todos.filter(todo => {
