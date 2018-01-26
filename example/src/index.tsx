@@ -42,8 +42,16 @@ const store = createStore((state: State = { todos: [], filter: "ALL" }, action) 
                 filter: action.payload.filter,
             }
         }
+        case "RESTORE_STATE": {
+            return action.payload.state
+        }
         default: return state
     }
+})
+
+store.subscribe(() => {
+    const data = JSON.stringify(store.getState())
+    localStorage.setItem("data", data)
 })
 
 function TodoApp() {
@@ -55,6 +63,24 @@ function TodoApp() {
         </div>
     )
 
+}
+
+class TodoAppContainer extends ReduxContainer(TodoApp) {
+
+    componentWillMount() {
+        try {
+
+            const state = JSON.parse(localStorage.getItem("data"))
+            this.store.dispatch({
+                type: "RESTORE_STATE",
+                payload: { state }
+            })
+        } catch (error) {
+            // don't to anything
+        }
+    }
+
+    getChildProps() { return {} }
 }
 
 function TodoInput(props: {value: string, onChange: React.ChangeEventHandler<any>, onSubmit: React.FormEventHandler<any>}) {
@@ -186,6 +212,6 @@ class TodoFilterbarContainer extends ReduxContainer(TodoFilterbar)<State> {
 
 ReactDOM.render(
     <Provider store={store}>
-        <TodoApp/>
+        <TodoAppContainer/>
     </Provider>,
 document.body.firstElementChild)
