@@ -1,12 +1,13 @@
 {
   "name": "react-class-container",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Manage your react containers as es6 classes",
   "main": "./lib/index.js",
   "typings": "./lib/index.d.ts",
   "scripts": {
     "build": "tsc",
-    "prepublishOnly": "tsc && tslint src/**"
+    "lint": "tslint src/**",
+    "prepublishOnly": "npm run build && npm run lint"
   },
   "keywords": [
     "react",
