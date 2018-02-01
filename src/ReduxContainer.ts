@@ -20,7 +20,8 @@ function ReduxContainer<V>(template: React.ComponentType<V>): ReduxContainerClas
     abstract class ContainerImplementation extends ReduxContainerComponent<V> {
 
         render() {
-            return React.createElement(template, this.getChildProps())
+            const props = typeof this.getChildProps === "function" ? this.getChildProps() : null as any
+            return React.createElement(template, props)
         }
     }
 

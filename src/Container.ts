@@ -20,7 +20,8 @@ function Container<V>(template: React.ComponentType<V>): ContainerClass<V> {
     abstract class ContainerImplementation extends ContainerComponent<V> {
 
         render() {
-            return React.createElement(template, this.getChildProps())
+            const props = typeof this.getChildProps === "function" ? this.getChildProps() : null
+            return React.createElement(template, props)
         }
     }
 
