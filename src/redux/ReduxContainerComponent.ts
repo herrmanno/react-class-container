@@ -7,13 +7,17 @@ import ContainerComponentBase from "../ContainerComponentBase"
  * A Component which renderes a pre-defined template and provides own props and redux state to this template
  *
  *
- * The ReduxContainerComponent my overwrite some of React's lifecycle methods.
- * If your class extends ContainerComponent and overwrites some lifecycle methods remember to call {@code super()}
+ * The ReduxContainerComponent my overwrite React's lifecycle methods.
+ * If a class extends ContainerComponent and overwrites some lifecycle methods it should call {@code super()}.
  */
 abstract class ReduxContainerComponent<
+  /** The props this container provides to its child template */
   V,
+  /** The shape of the state hold by redux */
   R = any,
+  /** The container's props */
   P = {},
+  /** The container's state */
   S = {}
 > extends ContainerComponentBase<V, P, S> {
   static contextTypes = {

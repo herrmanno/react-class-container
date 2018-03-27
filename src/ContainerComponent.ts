@@ -3,7 +3,7 @@ import * as React from "react"
 /**
  * A Component which renderes a pre-defined template and provides props to this template
  *
- * The ContainerComponent my overwrite some of React's lifecycle methods.
+ * The ContainerComponent my overwrite React's lifecycle methods.
  */
 interface ContainerComponent<
   /** The props this container provides to its child template */
