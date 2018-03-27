@@ -1,3 +1,5 @@
+.vscode
+docs
 src
 node_modules
 example

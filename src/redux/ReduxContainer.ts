@@ -16,17 +16,20 @@ import ReduxContainerComponent from "./ReduxContainerComponent"
  * }
  * ```
  */
-function ReduxContainer<V>(template: React.ComponentType<V>): ReduxContainerClass<V> {
-    abstract class ContainerImplementation extends ReduxContainerComponent<V> {
-
-        render() {
-            const props = typeof this.getChildProps === "function" ? this.getChildProps() : undefined
-            return React.createElement(template, props)
-        }
+function ReduxContainer<V>(
+  template: React.ComponentType<V>
+): ReduxContainerClass<V> {
+  abstract class ContainerImplementation extends ReduxContainerComponent<V> {
+    render() {
+      const props =
+        typeof this.getChildProps === "function"
+          ? this.getChildProps()
+          : undefined
+      return React.createElement(template, props)
     }
+  }
 
-    return ContainerImplementation as any
+  return ContainerImplementation as any
 }
-
 
 export default ReduxContainer
