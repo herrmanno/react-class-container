@@ -35,8 +35,15 @@ function ReduxContainer<V>(
       const props =
         typeof this.getChildProps === "function"
           ? this.getChildProps()
-          : undefined
+          : this.getDefaultChildProps()
       return React.createElement(template, props)
+    }
+
+    private getDefaultChildProps(): V {
+      return <any>{
+        ...(this.props || {}),
+        ...(this.state || {})
+      }
     }
   }
 

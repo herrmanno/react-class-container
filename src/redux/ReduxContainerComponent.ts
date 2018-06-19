@@ -1,7 +1,7 @@
 import * as React from "react"
 import * as Proptypes from "prop-types"
 import { Store } from "redux"
-import ContainerComponentBase from "../ContainerComponentBase"
+import ContainerComponentBase from "../container/ContainerComponentBase"
 
 /**
  * A Component which renderes a pre-defined template and provides own props and redux state to this template

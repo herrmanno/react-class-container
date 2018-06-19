@@ -27,11 +27,15 @@ import ContainerComponentBase from "./ContainerComponentBase"
 function Container<V>(template: React.ComponentType<V>): ContainerClass<V> {
   abstract class ContainerImplementation extends ContainerComponentBase<V> {
     render() {
-      const props =
-        typeof this.getChildProps === "function"
-          ? this.getChildProps()
-          : undefined
+      const props = typeof this.getChildProps === "function" ? this.getChildProps() : this.getDefaultChildProps()
       return React.createElement(template, props)
+    }
+
+    private getDefaultChildProps(): V {
+      return <any>{
+        ...(this.props || {}),
+        ...(this.state || {})
+      }
     }
   }
 
