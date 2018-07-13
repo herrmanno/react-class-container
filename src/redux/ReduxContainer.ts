@@ -1,4 +1,6 @@
+import * as Proptypes from "prop-types"
 import * as React from "react"
+import { Store } from "redux"
 import ReduxContainerClass from "./ReduxContainerClass"
 import ReduxContainerComponent from "./ReduxContainerComponent"
 
@@ -27,27 +29,70 @@ import ReduxContainerComponent from "./ReduxContainerComponent"
  * // <FooContainer> renders <span>{/* content of `reduxState.name` *\/}</span>
  * ```
  */
-function ReduxContainer<V>(
-  template: React.ComponentType<V>
-): ReduxContainerClass<V> {
-  abstract class ContainerImplementation extends ReduxContainerComponent<V> {
-    render() {
-      const props =
-        typeof this.getChildProps === "function"
-          ? this.getChildProps()
-          : this.getDefaultChildProps()
-      return React.createElement(template, props)
+function ReduxContainer<V>(template: React.ComponentType<V>): ReduxContainerClass<V> {
+  class ReduxContainerImplementation<R = any, P = any, S = any> extends React.PureComponent<P, S>
+    implements ReduxContainerComponent<V, R, P, S> {
+    static contextTypes = {
+      store: Proptypes.object.isRequired
     }
 
-    private getDefaultChildProps(): V {
+    private readonly unsubscribe: Function
+
+    private lastChildProps?: V
+
+    constructor(props?: any, context?: any) {
+      super(props, context)
+      this.unsubscribe = this.store.subscribe(this.onUpdate.bind(this))
+    }
+
+    componentDidMount() {
+      this.lastChildProps = this.getChildProps(this.props, this.state, this.store.getState())
+    }
+
+    componentWillUnmount() {
+      this.unsubscribe()
+    }
+
+    /**
+     * the redux store, if one is accessiable from the container
+     */
+    public get store(): Store<R> {
+      return this.context.store
+    }
+
+    public getChildProps(props: P, state: S, reduxState: R): V {
       return <any>{
-        ...(this.props || {}),
-        ...(this.state || {})
+        ...((this.props as any) || {}),
+        ...((this.state as any) || {}),
+        ...((this.store.getState() as any) || {})
+      }
+    }
+
+    public render() {
+      return React.createElement(template, this.callGetChildProps())
+    }
+
+    private callGetChildProps(): V {
+      return this.getChildProps(this.props, this.state, this.store.getState())
+    }
+
+    private onUpdate() {
+      const lastChildProps: any = { ...(this.lastChildProps || {}) }
+      const newChildProps: any = this.callGetChildProps()
+      const lastKeys = Object.keys(lastChildProps)
+      const newKeys = Object.keys(newChildProps)
+
+      if (lastKeys.length !== newKeys.length) {
+        return this.forceUpdate()
+      } else if (lastKeys.some(k => lastChildProps[k] !== newChildProps[k])) {
+        return this.forceUpdate()
+      } else if (newKeys.some(k => lastChildProps[k] !== newChildProps[k])) {
+        return this.forceUpdate()
       }
     }
   }
 
-  return ContainerImplementation as any
+  return ReduxContainerImplementation
 }
 
 export default ReduxContainer

@@ -76,7 +76,7 @@ function TodoApp() {
 
 class TodoAppContainer extends ReduxContainer(TodoApp) {
   componentWillMount() {
-    try {
+    if (localStorage.getItem("data")) {
       const state = JSON.parse(localStorage.getItem("data"))
       if (state) {
         this.store.dispatch({
@@ -84,8 +84,6 @@ class TodoAppContainer extends ReduxContainer(TodoApp) {
           payload: { state }
         })
       }
-    } catch (error) {
-      // don't to anything
     }
   }
 }
@@ -123,13 +121,9 @@ class TodoInputContainer extends ReduxContainer(TodoInput) {
     this.setState({ value: "" })
   }
 
-  componentWillReceiveReduxState() {
-    return null
-  }
-
-  getChildProps() {
+  getChildProps(_props, state) {
     return {
-      value: this.state.value,
+      value: state.value,
       onChange: this.onChange,
       onSubmit: this.onSubmit
     }
@@ -202,13 +196,9 @@ class TodoFilterbarContainer extends ReduxContainer(TodoFilterbar)<State> {
     })
   }
 
-  componentWillReceiveReduxState(state: State) {
-    return state.filter
-  }
-
-  getChildProps() {
+  getChildProps(_props, _state, storeState) {
     return {
-      activeFilter: this.store.getState().filter,
+      activeFilter: storeState.filter,
       onFilter: this.onFilter
     }
   }

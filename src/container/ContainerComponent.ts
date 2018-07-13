@@ -12,11 +12,10 @@ interface ContainerComponent<
   P = any,
   /** The container's state */
   S = any
-> extends React.PureComponent<P, S> {
+> extends React.Component<P, S> {
   /**
    * @returns an object containig all fields marked as Prop
    */
-  getChildProps(): V
+  getChildProps(props: P, state: S): V
 }
-
 export default ContainerComponent

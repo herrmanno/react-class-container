@@ -1,6 +1,6 @@
 import * as React from "react"
 import ContainerClass from "./ContainerClass"
-import ContainerComponentBase from "./ContainerComponentBase"
+import { ContainerComponent } from "."
 
 /**
  * Creates a container class for a wrapper template component
@@ -25,21 +25,21 @@ import ContainerComponentBase from "./ContainerComponentBase"
  * ```
  */
 function Container<V>(template: React.ComponentType<V>): ContainerClass<V> {
-  abstract class ContainerImplementation extends ContainerComponentBase<V> {
-    render() {
-      const props = typeof this.getChildProps === "function" ? this.getChildProps() : this.getDefaultChildProps()
-      return React.createElement(template, props)
+  class ContainerImplementation<P = any, S = any> extends React.PureComponent<P, S>
+    implements ContainerComponent<V, P, S> {
+    public render() {
+      return React.createElement(template, this.getChildProps(this.props, this.state))
     }
 
-    private getDefaultChildProps(): V {
-      return <any>{
-        ...(this.props || {}),
-        ...(this.state || {})
+    public getChildProps(props: P, state: S): V {
+      return {
+        ...((props as any) || {}),
+        ...((state as any) || {})
       }
     }
   }
 
-  return ContainerImplementation as any
+  return ContainerImplementation
 }
 
 export default Container
