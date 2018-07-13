@@ -14,15 +14,15 @@ import { ContainerComponent } from "."
  *
  * @example
  * ```javascript
- * const Foo = props => <span>{prop.name}</span>
- *
- * class FooContainer extends Container(Foo) {
- *   getChildProps() {
- *     return { name: "Foo" }
- *   }
- *
- * // <FooContainer/> renders <span>Foo</span>
- * ```
+  const Foo = props => <span>{prop.name}</span>
+
+  class FooContainer extends Container(Foo) {
+    getChildProps() {
+      return { name: "Foo" }
+    }
+
+  // <FooContainer/> renders <span>Foo</span>
+  ```
  */
 function Container<V>(template: React.ComponentType<V>): ContainerClass<V> {
   class ContainerImplementation<P = any, S = any> extends React.PureComponent<P, S>

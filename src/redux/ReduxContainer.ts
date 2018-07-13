@@ -18,16 +18,16 @@ import ReduxContainerComponent from "./ReduxContainerComponent"
  *
  * @example
  * ```javascript
- * const Foo = props => <span>{prop.name}</span>
- *
- * class FooContainer extends ReduxContainer(Foo) {
- *   getChildProps() {
- *     return { name: this.store.getState().name }
- *   }
- * }
- *
- * // <FooContainer> renders <span>{/* content of `reduxState.name` *\/}</span>
- * ```
+ const Foo = props => <span>{prop.name}</span>
+
+  class FooContainer extends ReduxContainer(Foo) {
+    getChildProps() {
+      return { name: this.store.getState().name }
+    }
+  }
+
+  // <FooContainer> renders <span>{/* content of `reduxState.name` *\/}</span>
+  ```
  */
 function ReduxContainer<V>(template: React.ComponentType<V>): ReduxContainerClass<V> {
   class ReduxContainerImplementation<R = any, P = any, S = any> extends React.PureComponent<P, S>
@@ -43,10 +43,6 @@ function ReduxContainer<V>(template: React.ComponentType<V>): ReduxContainerClas
     constructor(props?: any, context?: any) {
       super(props, context)
       this.unsubscribe = this.store.subscribe(this.onUpdate.bind(this))
-    }
-
-    componentDidMount() {
-      this.lastChildProps = this.getChildProps(this.props, this.state, this.store.getState())
     }
 
     componentWillUnmount() {
