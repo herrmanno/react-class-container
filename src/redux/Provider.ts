@@ -10,7 +10,7 @@ class Provider extends React.PureComponent<{ store: Store<any> }, {}> {
     store: Proptypes.any.isRequired
   }
 
-  getChildContext() {
+  getChildContext(): any {
     return { store: this.props.store }
   }
 
