@@ -30,7 +30,7 @@ import ReduxContainerComponent from "./ReduxContainerComponent"
   ```
  */
 function ReduxContainer<V>(template: React.ComponentType<V>): ReduxContainerClass<V> {
-  class ReduxContainerImplementation<R = any, P = any, S = any> extends React.PureComponent<P, S>
+  class ReduxContainerImplementation<R = any, P = any, S = any> extends React.Component<P, S>
     implements ReduxContainerComponent<V, R, P, S> {
     static contextTypes = {
       store: Proptypes.object.isRequired
@@ -51,6 +51,23 @@ function ReduxContainer<V>(template: React.ComponentType<V>): ReduxContainerClas
 
     componentWillUnmount() {
       this.unsubscribe()
+    }
+
+    shouldComponentUpdate(nextProps: Readonly<P>, nextState: Readonly<S>, nextContext: any) {
+      const lastChildProps: any = { ...(this.lastChildProps || {}) }
+      const newChildProps: any = this.getChildProps(nextProps, nextState, nextContext.store.getState())
+      const lastKeys = Object.keys(lastChildProps)
+      const newKeys = Object.keys(newChildProps)
+
+      this.lastChildProps = newChildProps
+
+      if (lastKeys.some(k => lastChildProps[k] !== newChildProps[k])) {
+        return true
+      } else if (newKeys.some(k => lastChildProps[k] !== newChildProps[k])) {
+        return true
+      } else {
+        return false
+      }
     }
 
     /**
@@ -77,18 +94,7 @@ function ReduxContainer<V>(template: React.ComponentType<V>): ReduxContainerClas
     }
 
     private onUpdate() {
-      const lastChildProps: any = { ...(this.lastChildProps || {}) }
-      const newChildProps: any = this.callGetChildProps()
-      const lastKeys = Object.keys(lastChildProps)
-      const newKeys = Object.keys(newChildProps)
-
-      this.lastChildProps = newChildProps
-
-      if (lastKeys.some(k => lastChildProps[k] !== newChildProps[k])) {
-        console.log("Updating redux container due to: value changed")
-        return this.forceUpdate()
-      } else if (newKeys.some(k => lastChildProps[k] !== newChildProps[k])) {
-        console.log("Updating redux container due to: value changed")
+      if (this.shouldComponentUpdate(this.props, this.state, this.context)) {
         return this.forceUpdate()
       }
     }

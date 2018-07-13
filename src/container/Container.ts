@@ -1,6 +1,7 @@
 import * as React from "react"
 import ContainerClass from "./ContainerClass"
 import { ContainerComponent } from "."
+import { networkInterfaces } from "os"
 
 /**
  * Creates a container class for a wrapper template component
@@ -25,8 +26,26 @@ import { ContainerComponent } from "."
   ```
  */
 function Container<V>(template: React.ComponentType<V>): ContainerClass<V> {
-  class ContainerImplementation<P = any, S = any> extends React.PureComponent<P, S>
-    implements ContainerComponent<V, P, S> {
+  class ContainerImplementation<P = any, S = any> extends React.Component<P, S> implements ContainerComponent<V, P, S> {
+    private lastChildProps?: V
+
+    public shouldComponentUpdate(nextProps: Readonly<P>, nextState: Readonly<S>, nextContext: any) {
+      const lastChildProps: any = { ...(this.lastChildProps || {}) }
+      const newChildProps: any = this.getChildProps(nextProps, nextState)
+      const lastKeys = Object.keys(lastChildProps)
+      const newKeys = Object.keys(newChildProps)
+
+      this.lastChildProps = newChildProps
+
+      if (lastKeys.some(k => lastChildProps[k] !== newChildProps[k])) {
+        return true
+      } else if (newKeys.some(k => lastChildProps[k] !== newChildProps[k])) {
+        return true
+      } else {
+        return false
+      }
+    }
+
     public render() {
       return React.createElement(template, this.getChildProps(this.props, this.state))
     }
