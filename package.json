@@ -3,8 +3,9 @@
   "version": "1.0.4",
   "description": "Manage your react containers as es6 classes",
   "main": "lib/index.js",
-  "typings": "lib/index.d.ts",
+  "typings": "lib/src/index.d.ts",
   "scripts": {
+    "test": "ava lib/test",
     "build": "tsc",
     "lint": "tslint src/**",
     "doc": "typedoc --mode file --excludePrivate excludeNotExported --out docs src",
@@ -26,9 +27,15 @@
     "redux": ">=3.x.x"
   },
   "devDependencies": {
+    "@types/enzyme": "3.1.11",
+    "@types/enzyme-adapter-react-16": "1.0.2",
     "@types/react": "16.0.18",
     "@types/redux": "3.6.0",
+    "ava": "0.25.0",
+    "enzyme": "3.3.0",
+    "enzyme-adapter-react-16": "1.1.1",
     "react": "16.4.1",
+    "react-dom": "16.4.1",
     "redux": "4.0.0",
     "tslint": "5.8.0",
     "typedoc": "0.11.1",

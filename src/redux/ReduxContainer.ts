@@ -45,6 +45,10 @@ function ReduxContainer<V>(template: React.ComponentType<V>): ReduxContainerClas
       this.unsubscribe = this.store.subscribe(this.onUpdate.bind(this))
     }
 
+    componentDidMount() {
+      this.lastChildProps = this.callGetChildProps()
+    }
+
     componentWillUnmount() {
       this.unsubscribe()
     }
@@ -78,11 +82,13 @@ function ReduxContainer<V>(template: React.ComponentType<V>): ReduxContainerClas
       const lastKeys = Object.keys(lastChildProps)
       const newKeys = Object.keys(newChildProps)
 
-      if (lastKeys.length !== newKeys.length) {
-        return this.forceUpdate()
-      } else if (lastKeys.some(k => lastChildProps[k] !== newChildProps[k])) {
+      this.lastChildProps = newChildProps
+
+      if (lastKeys.some(k => lastChildProps[k] !== newChildProps[k])) {
+        console.log("Updating redux container due to: value changed")
         return this.forceUpdate()
       } else if (newKeys.some(k => lastChildProps[k] !== newChildProps[k])) {
+        console.log("Updating redux container due to: value changed")
         return this.forceUpdate()
       }
     }
