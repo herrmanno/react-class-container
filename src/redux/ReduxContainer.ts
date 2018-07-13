@@ -62,9 +62,9 @@ function ReduxContainer<V>(template: React.ComponentType<V>): ReduxContainerClas
 
     public getChildProps(props: P, state: S, reduxState: R): V {
       return <any>{
-        ...((this.props as any) || {}),
-        ...((this.state as any) || {}),
-        ...((this.store.getState() as any) || {})
+        ...((props as any) || {}),
+        ...((state as any) || {}),
+        ...((reduxState as any) || {})
       }
     }
 
