@@ -1,8 +1,8 @@
 {
   "name": "react-class-container",
-  "version": "2.0.3",
+  "version": "2.0.4",
   "description": "Manage your react containers as es6 classes",
-  "main": "lib/index.js",
+  "main": "lib/src/index.js",
   "typings": "lib/src/index.d.ts",
   "scripts": {
     "test": "ava lib/test",
