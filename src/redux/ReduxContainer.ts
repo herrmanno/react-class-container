@@ -4,6 +4,21 @@ import { Store } from "redux"
 import ReduxContainerClass from "./ReduxContainerClass"
 import ReduxContainerComponent from "./ReduxContainerComponent"
 
+declare const process: any
+
+const dummyStore: Store<any> = {
+  dispatch(a) {
+    return a
+  },
+  getState() {
+    return {}
+  },
+  subscribe() {
+    return () => null
+  },
+  replaceReducer() {}
+}
+
 /**
  * Creates a container class for a wrapper template component
  *
@@ -74,7 +89,18 @@ function ReduxContainer<V>(template: React.ComponentType<V>): ReduxContainerClas
      * the redux store, if one is accessiable from the container
      */
     public get store(): Store<R> {
-      return this.context.store
+      if (this.context.store) {
+        return this.context.store
+      } else if (typeof window === "undefined") {
+        return dummyStore
+      } else {
+        if (process && process.env && process.env.NODE_ENV !== "production") {
+          console.error(
+            "ReduxContainer could not access redux store. You may forgot to provide your store via '<Provide store={store}>...</Provider>'"
+          )
+        }
+        return dummyStore
+      }
     }
 
     public getChildProps(props: P, state: S, reduxState: R): V {
