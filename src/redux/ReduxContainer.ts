@@ -61,7 +61,7 @@ function ReduxContainer<V>(template: React.ComponentType<V>): ReduxContainerClas
     }
 
     componentDidMount() {
-      this.lastChildProps = this.callGetChildProps()
+      this.lastChildProps = this.getChildProps(this.props, this.state, this.store.getState())
     }
 
     componentWillUnmount() {
@@ -91,8 +91,6 @@ function ReduxContainer<V>(template: React.ComponentType<V>): ReduxContainerClas
     public get store(): Store<R> {
       if (this.context.store) {
         return this.context.store
-      } else if (typeof window === "undefined") {
-        return dummyStore
       } else {
         if (process && process.env && process.env.NODE_ENV !== "production") {
           console.error(
@@ -101,6 +99,10 @@ function ReduxContainer<V>(template: React.ComponentType<V>): ReduxContainerClas
         }
         return dummyStore
       }
+    }
+
+    public get childProps(): V {
+      return this.getChildProps(this.props, this.state, this.store.getState())
     }
 
     public getChildProps(props: P, state: S, reduxState: R): V {
@@ -112,11 +114,7 @@ function ReduxContainer<V>(template: React.ComponentType<V>): ReduxContainerClas
     }
 
     public render() {
-      return React.createElement(template, this.callGetChildProps())
-    }
-
-    private callGetChildProps(): V {
-      return this.getChildProps(this.props, this.state, this.store.getState())
+      return React.createElement(template, this.getChildProps(this.props, this.state, this.store.getState()))
     }
 
     private onUpdate() {

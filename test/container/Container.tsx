@@ -87,3 +87,23 @@ test("Should pass props and state to `getChildProps`", t => {
   t.deepEqual(passedProps, containerProps)
   t.deepEqual(passedState, containerState)
 })
+
+test("Should return `getChildProps(this.props, this.state)` from childProps", t => {
+  const containerProps = {
+    foo: "FOO",
+    baz: 123
+  }
+
+  const containerState = {
+    foo: "foo",
+    bar: "BAR"
+  }
+
+  class MyContainer extends Container(() => null) {
+    state = containerState
+  }
+
+  const instance: any = enzyme.shallow(<MyContainer {...containerProps} />).instance()
+
+  t.deepEqual(instance.childProps, { ...containerProps, ...containerState })
+})
