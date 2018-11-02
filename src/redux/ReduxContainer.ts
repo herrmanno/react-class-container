@@ -4,6 +4,21 @@ import { Store } from "redux"
 import ReduxContainerClass from "./ReduxContainerClass"
 import ReduxContainerComponent from "./ReduxContainerComponent"
 
+declare const process: any
+
+const dummyStore: Store<any> = {
+  dispatch(a) {
+    return a
+  },
+  getState() {
+    return {}
+  },
+  subscribe() {
+    return () => null
+  },
+  replaceReducer() {}
+}
+
 /**
  * Creates a container class for a wrapper template component
  *
@@ -46,7 +61,7 @@ function ReduxContainer<V>(template: React.ComponentType<V>): ReduxContainerClas
     }
 
     componentDidMount() {
-      this.lastChildProps = this.callGetChildProps()
+      this.lastChildProps = this.getChildProps(this.props, this.state, this.store.getState())
     }
 
     componentWillUnmount() {
@@ -74,7 +89,20 @@ function ReduxContainer<V>(template: React.ComponentType<V>): ReduxContainerClas
      * the redux store, if one is accessiable from the container
      */
     public get store(): Store<R> {
-      return this.context.store
+      if (this.context.store) {
+        return this.context.store
+      } else {
+        if (process && process.env && process.env.NODE_ENV !== "production") {
+          console.error(
+            "ReduxContainer could not access redux store. You may forgot to provide your store via '<Provide store={store}>...</Provider>'"
+          )
+        }
+        return dummyStore
+      }
+    }
+
+    public get childProps(): V {
+      return this.getChildProps(this.props, this.state, this.store.getState())
     }
 
     public getChildProps(props: P, state: S, reduxState: R): V {
@@ -86,11 +114,7 @@ function ReduxContainer<V>(template: React.ComponentType<V>): ReduxContainerClas
     }
 
     public render() {
-      return React.createElement(template, this.callGetChildProps())
-    }
-
-    private callGetChildProps(): V {
-      return this.getChildProps(this.props, this.state, this.store.getState())
+      return React.createElement(template, this.getChildProps(this.props, this.state, this.store.getState()))
     }
 
     private onUpdate() {

@@ -13,6 +13,8 @@ interface ContainerComponent<
   /** The container's state */
   S = any
 > extends React.Component<P, S> {
+  childProps: V
+
   /**
    * @returns an object containig all fields marked as Prop
    */

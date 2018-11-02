@@ -181,3 +181,31 @@ test("Should update if 'watched' part of redux state updates", t => {
   t.true(passedProps !== passedPropsAfterFirstRender)
   t.deepEqual(passedProps, { john: "yoko ono" })
 })
+
+test("Should return `getChildProps(this.props, this.state, this.store.getState())` from childProps", t => {
+  const reduxState = {
+    john: "guitar",
+    ringo: "drums",
+    paul: "bass"
+  }
+
+  const store = createStore(reduxState)
+
+  const containerProps = {
+    foo: "FOO",
+    baz: 123
+  }
+
+  const containerState = {
+    foo: "foo",
+    bar: "BAR"
+  }
+
+  class MyContainer extends ReduxContainer(() => null) {
+    state = containerState
+  }
+
+  const instance: any = enzyme.shallow(<MyContainer {...containerProps} />, { context: { store } }).instance()
+
+  t.deepEqual(instance.childProps, { ...containerProps, ...containerState, ...reduxState })
+})

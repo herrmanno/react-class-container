@@ -1,7 +1,6 @@
 import * as React from "react"
 import ContainerClass from "./ContainerClass"
 import { ContainerComponent } from "."
-import { networkInterfaces } from "os"
 
 /**
  * Creates a container class for a wrapper template component
@@ -48,6 +47,10 @@ function Container<V>(template: React.ComponentType<V>): ContainerClass<V> {
 
     public render() {
       return React.createElement(template, this.getChildProps(this.props, this.state))
+    }
+
+    public get childProps(): V {
+      return this.getChildProps(this.props, this.state)
     }
 
     public getChildProps(props: P, state: S): V {

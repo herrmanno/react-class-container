@@ -18,6 +18,9 @@ interface ReduxContainerComponent<
   S = any
 > extends React.Component<P, S> {
   store: Store<any>
+
+  childProps: V
+
   /**
    * @returns an object containig all fields marked as Prop
    */
