@@ -64,7 +64,7 @@ class MyInputContainer extends Container(MyComponent) {
   }
 
   /*
-  * `onChange` is implemented as arrow function propetiy
+  * `onChange` is implemented as arrow function property
   * so `this` is bound properly to the function
   * and its value stays the same on each call of
   * `getChildProps`.
