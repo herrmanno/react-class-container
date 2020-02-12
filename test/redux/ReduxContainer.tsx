@@ -9,7 +9,7 @@ enzyme.configure({ adapter: new EnzymeAdapter() })
 
 function createStore(initialState: any = {}) {
   return redux.createStore(
-    (state, action: any) => {
+    (state: any, action: any) => {
       return { ...state, ...action.payload }
     },
     initialState as any
@@ -125,7 +125,7 @@ test("Shouldn't update if 'unwatched' part of redux state updates", t => {
   let passedProps: any = undefined
 
   class MyContainer extends ReduxContainer(props => ((passedProps = props), null)) {
-    getChildProps(props: any, state: any, reduxState: any) {
+    getChildProps(_props: any, _state: any, reduxState: any) {
       return {
         john: reduxState.john
       }

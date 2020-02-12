@@ -12,8 +12,10 @@ interface ContainerComponent<
   P = any,
   /** The container's state */
   S = any
-> extends React.Component<P, S> {
-  childProps: V
+  > extends React.Component<P, S> {
+  readonly childProps: V
+
+  readonly lastChildProps?: V
 
   /**
    * @returns an object containig all fields marked as Prop

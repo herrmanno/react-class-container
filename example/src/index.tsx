@@ -15,7 +15,7 @@ const DefaultState: State = {
   filter: "ALL"
 }
 
-const store = createStore((state: State, action) => {
+const store = createStore((state: State, action: any) => {
   switch (action.type) {
     case "ADD_TODO": {
       return {
@@ -57,7 +57,7 @@ const store = createStore((state: State, action) => {
     default:
       return state
   }
-}, DefaultState)
+}, DefaultState as any)
 
 store.subscribe(() => {
   const data = JSON.stringify(store.getState())

@@ -26,7 +26,7 @@ import { ContainerComponent } from "."
  */
 function Container<V>(template: React.ComponentType<V>): ContainerClass<V> {
   class ContainerImplementation<P = any, S = any> extends React.Component<P, S> implements ContainerComponent<V, P, S> {
-    private lastChildProps?: V
+    public lastChildProps?: V
 
     public shouldComponentUpdate(nextProps: Readonly<P>, nextState: Readonly<S>, nextContext: any) {
       const lastChildProps: any = { ...(this.lastChildProps || {}) }

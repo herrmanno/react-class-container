@@ -16,10 +16,12 @@ interface ReduxContainerComponent<
   P = any,
   /** The container's state */
   S = any
-> extends React.Component<P, S> {
-  store: Store<any>
+  > extends React.Component<P, S> {
+  readonly store: Store<R, any>
 
-  childProps: V
+  readonly childProps: V
+
+  readonly lastChildProps?: V
 
   /**
    * @returns an object containig all fields marked as Prop

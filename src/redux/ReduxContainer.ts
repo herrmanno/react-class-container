@@ -16,7 +16,7 @@ const dummyStore: Store<any> = {
   subscribe() {
     return () => null
   },
-  replaceReducer() {}
+  replaceReducer() { }
 }
 
 /**
@@ -53,7 +53,7 @@ function ReduxContainer<V>(template: React.ComponentType<V>): ReduxContainerClas
 
     private readonly unsubscribe: Function
 
-    private lastChildProps?: V
+    public lastChildProps?: V
 
     constructor(props?: any, context?: any) {
       super(props, context)
@@ -88,7 +88,7 @@ function ReduxContainer<V>(template: React.ComponentType<V>): ReduxContainerClas
     /**
      * the redux store, if one is accessiable from the container
      */
-    public get store(): Store<R> {
+    public get store(): Store<R, any> {
       if (this.context.store) {
         return this.context.store
       } else {
